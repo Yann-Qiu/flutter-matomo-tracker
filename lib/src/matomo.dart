@@ -46,6 +46,10 @@ class MatomoTracker {
   Visitor get visitor => _visitor;
   late Visitor _visitor;
 
+  void updateDispatcher({required String url, String? tokenAuth }) {
+    _dispatcher = MatomoDispatcher(url, tokenAuth);
+  }
+
   void setVisitorUserId(String? userId) {
     _visitor =
         Visitor(id: _visitor.id, forcedId: _visitor.forcedId, userId: userId);

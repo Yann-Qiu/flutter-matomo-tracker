@@ -25,6 +25,7 @@ class MatomoTracker {
   static const kVisitCount = 'matomo_visit_count';
   static const kVisitorId = 'matomo_visitor_id';
   static const kOptOut = 'matomo_opt_out';
+  static String _customSuffix = ''; 
 
   final log = Logger('Matomo');
   late final PlatformInfo _platformInfo;
@@ -48,6 +49,10 @@ class MatomoTracker {
 
   void updateDispatcher({required String url, String? tokenAuth }) {
     _dispatcher = MatomoDispatcher(url, tokenAuth);
+  }
+
+  static void setCustomUASuffix({required String suffix}) {
+    _customSuffix = suffix;
   }
 
   void setVisitorUserId(String? userId) {
@@ -118,7 +123,11 @@ class MatomoTracker {
     _dispatcher = MatomoDispatcher(url, tokenAuth);
 
     // User agent
-    userAgent = await getUserAgent();
+    if (_customSuffix.isNotEmpty) {
+      userAgent = '${await getUserAgent()}, $_customSuffix';
+    } else {
+      userAgent = await getUserAgent();
+    }
 
     // Screen Resolution
     screenResolution =
